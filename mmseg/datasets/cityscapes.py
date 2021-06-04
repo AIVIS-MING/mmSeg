@@ -18,6 +18,7 @@ class CityscapesDataset(CustomDataset):
     fixed to '_gtFine_labelTrainIds.png' for Cityscapes dataset.
     """
 
+    """
     CLASSES = ('road', 'sidewalk', 'building', 'wall', 'fence', 'pole',
                'traffic light', 'traffic sign', 'vegetation', 'terrain', 'sky',
                'person', 'rider', 'car', 'truck', 'bus', 'train', 'motorcycle',
@@ -28,12 +29,26 @@ class CityscapesDataset(CustomDataset):
                [107, 142, 35], [152, 251, 152], [70, 130, 180], [220, 20, 60],
                [255, 0, 0], [0, 0, 142], [0, 0, 70], [0, 60, 100],
                [0, 80, 100], [0, 0, 230], [119, 11, 32]]
+    
+    
 
     def __init__(self, **kwargs):
         super(CityscapesDataset, self).__init__(
             img_suffix='_leftImg8bit.png',
             seg_map_suffix='_gtFine_labelTrainIds.png',
             **kwargs)
+    """
+
+    CLASSES = ('PNI')
+
+    PALETTE = [[128, 64, 128]]
+
+    def __init__(self, **kwargs):
+        super(CityscapesDataset, self).__init__(
+            img_suffix='_patchData.png',
+            seg_map_suffix='_patchLabel.png',
+            **kwargs)
+
 
     @staticmethod
     def _convert_to_label_id(result):
@@ -204,7 +219,7 @@ class CityscapesDataset(CustomDataset):
         # when evaluating with official cityscapesscripts,
         # **_gtFine_labelIds.png is used
         for seg_map in mmcv.scandir(
-                self.ann_dir, 'gtFine_labelIds.png', recursive=True):
+                self.ann_dir, 'patchLabel.png', recursive=True):
             seg_map_list.append(osp.join(self.ann_dir, seg_map))
             pred_list.append(CSEval.getPrediction(CSEval.args, seg_map))
 

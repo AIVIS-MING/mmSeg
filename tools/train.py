@@ -63,12 +63,14 @@ def parse_args():
 def main():
     args = parse_args()
 
+    torch.cuda.set_device(0)
+
     cfg = Config.fromfile(args.config)
     if args.options is not None:
         cfg.merge_from_dict(args.options)
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
-        torch.backends.cudnn.benchmark = True
+        torch.backends.cudnn.benchmark = False
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:
